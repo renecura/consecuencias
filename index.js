@@ -47,8 +47,7 @@ function splash(){
   document.getElementById("start").hidden = false;
   document.getElementById("decision").hidden = true;
   document.getElementById("estado").hidden = true;
-
-  console.log(urlParams.get("id"));
+  
 }
 
 function iniciar(){
@@ -65,6 +64,7 @@ function iniciar(){
   // Carga y baraja el mazo.
   estado.mazo = [...mazo];
   shuffle(estado.mazo);
+  console.log(estado.mazo);
 
   document.getElementById("start").hidden = true;
   document.getElementById("decision").hidden = false;
@@ -76,7 +76,7 @@ function iniciar(){
 function siguiente(estado){
   console.log("Carta siguiente");
 
-  estado.current = mazo.shift();
+  estado.current = estado.mazo.shift();
 
   if(estado.current){
     mostrar(estado.current);
@@ -170,13 +170,25 @@ function actualizar(i, valor, incremento) {
 
 function groupByRow(xs) {
   return xs.reduce((rv, x) => {
-    (rv[x.row] = rv[x.row] || []).push(x.$t);
+    (rv[parseInt(x.row) - 2] = rv[parseInt(x.row) - 2] || []).push(x.$t);
     return rv;
   }, []);
 };
 
 function parseConsecuencias(consecuencias){
-  return [0,0,0,0];
+  const regexp = /(\w+)\ *([\+|\-][0-9]*)/ig;
+
+  console.log(consecuencias);
+
+  let rs = [0,0,0,0];
+
+  for(c of consecuencias.matchAll(regexp)){
+    rs[factores.indexOf(c[1].toLowerCase())] = parseInt(c[2]);
+  }
+  
+  console.log(rs);
+
+  return rs;
 }
 
 function parseOpciones(row){
@@ -188,21 +200,22 @@ function parseOpciones(row){
       consecuencias:parseConsecuencias(row.shift())
     });
   }
+
   return rs;
 }
 
 function procesarDatos(json){
+
   let data = groupByRow(
     json.feed.entry
     .map(e => e.gs$cell)
     .filter(e => e.row != "1")
     );
 
-  console.log(data.map(row => ({
+  mazo = [...data.map(row => ({
     codigo: row.shift(),
     texto: row.shift(),
     imagen: row.shift(),
     opciones: parseOpciones(row)
-    }))
-    );
+    }))];
 }
