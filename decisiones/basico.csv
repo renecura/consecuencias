@@ -1,0 +1,4 @@
+codigo,texto,imagen,opcion 1,consecuencia 1,opcion 2,consecuencia 2
+B001,La comunidad de inmigrantes te pide beneficios sociales,B001.jpg,Aprobar,social+2 economia-2,Rechazar,social-2
+B002,Un empresario de una pesquera,B002.jpg,Aprobar,social+2 economia-2,Rechazar,social-2
+B003,La campaña de vacunación,B003.jpg,Aprobar,social+2 economia-2,Rechazar,social-2
